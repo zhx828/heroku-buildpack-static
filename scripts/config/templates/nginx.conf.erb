@@ -101,6 +101,14 @@ http {
       <% %w(http https).each do |scheme| %>
       proxy_redirect <%= hash["redirect_#{scheme}"] %> <%= location %>;
       <% end %>
+      <% if hash.key?('headers') %>
+        <% if hash['headers'].key?('X-Forwarded-Proto') %>
+          proxy_set_header X-Forwarded-Proto <%= hash['headers']['X-Forwarded-Proto'] %>;
+        <% end %>
+        <% if hash['headers'].key?('X-Forwarded-For') %>
+          proxy_set_header X-Forwarded-For <%= hash['headers']['X-Forwarded-For'] %>;
+        <% end %>
+      <% end %>
     }
   <% end %>
 
